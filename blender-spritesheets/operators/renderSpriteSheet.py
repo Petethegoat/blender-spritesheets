@@ -57,18 +57,19 @@ class RenderSpriteSheet(bpy.types.Operator):
             )
         )
         print("Assembler path: ", assemblerPath)
-        subprocess.run([assemblerPath, "--root", bpy.path.abspath(props.outputPath), "--out", objectToRender.name + ".png"])
+        subprocess.run([assemblerPath, "--root", bpy.path.abspath(props.outputPath), "--out", props.outputName + ".png"])
 
         json_info = {
-            "name": objectToRender.name,
+            "name": props.outputName,
             "tileWidth": props.tileSize[0],
             "tileHeight": props.tileSize[1],
             "frameRate": props.fps,
             "animations": animation_descs,
         }
 
-        with open(bpy.path.abspath(os.path.join(props.outputPath, objectToRender.name + ".bss")), "w") as f:
-            json.dump(json_info, f, indent='\t')
+        if props.exportBSS:
+            with open(bpy.path.abspath(os.path.join(props.outputPath, props.outputName + ".bss")), "w") as f:
+                json.dump(json_info, f, indent='\t')
 
         progressProps.rendering = False
         progressProps.success = True
@@ -90,7 +91,7 @@ class RenderSpriteSheet(bpy.types.Operator):
                 # eventually they may fix this and then we can leverage some of the progress information we track
                 bpy.ops.spritesheets.render_tile('EXEC_DEFAULT')
         else:
-            for index in range(frameMin, frameMax + 1):
+            for index in range(frameMin, frameMax):
                 progressProps.tileIndex = index
                 scene.frame_set(index)
                 # TODO: Unfortunately Blender's rendering happens on the same thread as the UI and freezes it while running,
@@ -99,6 +100,6 @@ class RenderSpriteSheet(bpy.types.Operator):
 
 
 def frame_count(frame_range):
-    frameMin = math.floor(frame_range[0])
+    frameMin = min(1, math.floor(frame_range[0]))
     frameMax = math.ceil(frame_range[1])
     return (frameMax - frameMin, frameMin, frameMax)

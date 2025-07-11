@@ -34,6 +34,16 @@ SpriteSheetPropertyGroup = type(
                 description="Only renders frames that have an Action Pose Marker, allowing you to choose which frames to include with a sprite sheet. To add marked frames make sure 'Show Pose Markers' is selected in the Action Editor.\n\nNote: If no markers are specified this will render the action normally.",
                 default=False
             ),
+            "exportBSS": bpy.props.BoolProperty(
+                name="Export BSS",
+                description="Export the BSS metadata file for import into other engines?",
+                default=True
+            ),
+            "outputName": bpy.props.StringProperty(
+                name="Filename",
+                description="Filename of the exported file, without extension.",
+                default="spritesheet"
+            ),
             "outputPath": bpy.props.StringProperty(
                 name="Path",
                 subtype="DIR_PATH",

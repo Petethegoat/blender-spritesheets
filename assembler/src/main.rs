@@ -43,8 +43,8 @@ fn main() -> BoxResult<()> {
 
     let mut out: RgbaImage = image::ImageBuffer::new(width, height);
     for (i, img) in images.iter().enumerate() {
-        let x = (i % tiles.x) * dims.x;
-        let y = (i / tiles.x) * dims.y;
+        let x = (i % tiles.x) * images.len();
+        let y = (i / tiles.x) * 1;
         image::imageops::replace(&mut out, img, x as u32, y as u32);
     }
 

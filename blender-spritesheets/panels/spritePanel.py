@@ -42,6 +42,10 @@ class UI_PT_SpritePanel(bpy.types.Panel):
         row = layout.row()
         row.label(text="Output", icon="FILE_FOLDER")
         row = layout.row()
+        row.prop(props, "exportBSS")
+        row = layout.row()
+        row.prop(props, "outputName")
+        row = layout.row()
         row.prop(props, "outputPath")
 
         layout.separator()
